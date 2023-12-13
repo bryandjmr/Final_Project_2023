@@ -220,15 +220,15 @@ class box:
             data (list): list of all past positions of 
             the particles
         """
-        figure, axes = plt.subplots()
         v = np.linspace(0, 2000, 1000)
         coeff = 2/self.avg_vel**2
         f = coeff*v*np.exp(-coeff*v**2/2)
         v_part = self.velocity()
-        hist = plt.hist(v_part, density=True)
-        line = plt.plot(v, f)
+        plt.hist(v_part, density=True)
+        plt.plot(v, f)
         plt.xlabel('Velocity')
         plt.ylabel('Particle Count')
+        plt.title('Boltzmann Distribution')
         plt.savefig('Boltzmann_Distribution')
         plt.close()
 
@@ -240,6 +240,6 @@ if __name__ == "__main__":
         p_list.append(particle(np.random.uniform(0, 1, 2), np.random.uniform(0,1,2)))
     d = box()
     d.add_particle(p_list)
-    data = d.simulation(15)
+    data = d.simulation(8)
     d.animate(data)
     d.boltzmann(data)
