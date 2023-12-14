@@ -12,7 +12,7 @@ class particle:
     moves and how it interacts with other particles.
     """
 
-    def __init__(self, r, v, rho = 0.01):
+    def __init__(self, r, v, rho = 0.02):
         """
         intrinsic properties of particles
 
@@ -198,10 +198,10 @@ class box:
                 axes.add_artist(cir)
             plt.xlim(self.xb[0]-0.2, self.xb[1]+0.2)
             plt.ylim(self.yb[0]-0.2, self.yb[1]+0.2)
-            plt.savefig('fig_{0:03}.png'.format(i))
+            plt.savefig('fig_{0:04}.png'.format(i))
             plt.close()
 
-        os.system('convert -delay 25 ./fig_*.png -loop 1 movie_test.gif')
+        os.system('convert -delay 5 ./fig_*.png -loop 1 movie_test.gif')
         [os.remove(file) for file in os.listdir('./') if file.endswith('.png')]
 
     def velocity(self):
@@ -220,11 +220,12 @@ class box:
             data (list): list of all past positions of 
             the particles
         """
-        v = np.linspace(0, 2000, 1000)
+        v = np.linspace(0, 2.1, 1000)
+        bins = np.arange(0,2,0.14)
         coeff = 2/self.avg_vel**2
         f = coeff*v*np.exp(-coeff*v**2/2)
         v_part = self.velocity()
-        plt.hist(v_part, density=True)
+        plt.hist(v_part,bins=bins, density=True)
         plt.plot(v, f)
         plt.xlabel('Velocity')
         plt.ylabel('Particle Count')
@@ -236,10 +237,10 @@ class box:
 
 if __name__ == "__main__":
     p_list = []
-    for i in range(20):
-        p_list.append(particle(np.random.uniform(0, 1, 2), np.random.uniform(0,1,2)))
+    for i in range(150):
+        p_list.append(particle(np.random.uniform(-1, 1, 2), np.random.uniform(-1,1,2)))
     d = box()
     d.add_particle(p_list)
-    data = d.simulation(8)
+    data = d.simulation(25)
     d.animate(data)
     d.boltzmann(data)
